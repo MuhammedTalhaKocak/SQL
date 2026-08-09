@@ -6,7 +6,7 @@ WITH TotalSpends AS
 (
 SELECT
 	c.CustomerID,
-	SUM(soh.TotalDue) AS total_spend
+	SUM(soh.TotalDue) AS TotalSpend
 FROM SalesLT.Customer c
 INNER JOIN SalesLT.SalesOrderHeader soh
 ON c.CustomerID = soh.CustomerID
@@ -15,26 +15,26 @@ GROUP BY c.CustomerID)
 (
 SELECT
 	*,
-    PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY total_spend) OVER () AS Q1,
-    PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY total_spend) OVER () AS Median,
-    PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY total_spend) OVER () AS Q3
+    PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY TotalSpend) OVER () AS Q1,
+    PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY TotalSpend) OVER () AS Median,
+    PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY TotalSpend) OVER () AS Q3
 FROM TotalSpends)
 ,Segments AS 
 (
 SELECT 
 	CustomerID,
-	total_spend,
+	TotalSpend,
 	CASE
-		WHEN total_spend < Q1 THEN 'Düsük Degerli'
-		WHEN total_spend BETWEEN Q1 AND Q3 THEN 'Orta Degerli'
-		ELSE 'Yüksek Degerli'
+		WHEN TotalSpend < Q1 THEN 'Düşük Değerli'
+		WHEN TotalSpend BETWEEN Q1 AND Q3 THEN 'Orta Değerli'
+		ELSE 'Yüksek Değerli'
 	END AS CustomerSegment
-FROM quartiles)
+FROM Quartiles)
 SELECT 
-    'Müşteri Sayisi' AS [Segment], -- Burası sizin "Index" sütununuz olur
-    COUNT(CASE WHEN CustomerSegment = 'Düsük Degerli' THEN 1 END) AS [Düsük Degerli],
-    COUNT(CASE WHEN CustomerSegment = 'Orta Degerli' THEN 1 END) AS [Orta Degerli],
-    COUNT(CASE WHEN CustomerSegment = 'Yüksek Degerli' THEN 1 END) AS [Yüksek Degerli]
+    'Müşteri Sayısı' AS [Segment], 
+    COUNT(CASE WHEN CustomerSegment = 'Düşük Değerli' THEN 1 END) AS [Düşük Değerli],
+    COUNT(CASE WHEN CustomerSegment = 'Orta Değerli' THEN 1 END) AS [Orta Değerli],
+    COUNT(CASE WHEN CustomerSegment = 'Yüksek Değerli' THEN 1 END) AS [Yüksek Değerli]
 FROM Segments
 
 /*
