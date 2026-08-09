@@ -1,5 +1,6 @@
 /* 
 Problem: Ürün Kategorisi Bazında Toplam Satış Geliri ve satılan ürün adedini bulma
+Kullanılan Teknikler: SUM, GROUP BY, ORDER BY, INNER JOIN 
 */
 
 SELECT 

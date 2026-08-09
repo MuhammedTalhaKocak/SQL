@@ -12,7 +12,7 @@ WITH CategoryRevenue AS (
     INNER JOIN SalesLT.ProductCategory pc ON p.ProductCategoryID = pc.ProductCategoryID
     GROUP BY pc.Name, p.Name
 ),
-[Category Rank] AS
+RankedProducts AS
 (
 SELECT 
     CategoryName,
@@ -20,7 +20,7 @@ SELECT
     Revenue,
     RANK() OVER (PARTITION BY CategoryName ORDER BY Revenue DESC) AS CategoryRank
 FROM CategoryRevenue)
-SELECT * FROM [Category Rank]
+SELECT * FROM RankedProducts
 WHERE CategoryRank = 1
 ORDER BY Revenue DESC
 /*

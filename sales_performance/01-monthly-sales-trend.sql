@@ -1,5 +1,6 @@
 /* 
 Aylık Bazda satış sayısı ve toplam geliri bulma (zaman serisi analizi)
+Kullanılan Teknikler: MIN, MAX, COUNT, DISTINCT gibi betimsel istatistik fonksiyonları
 */
 
 SELECT 
